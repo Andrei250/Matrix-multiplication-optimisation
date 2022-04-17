@@ -3,7 +3,7 @@
  * 2022 Spring
  */
 #include "utils.h"
-#include <cblas.h>
+// #include "cblas.h"
 
 /* 
  * Add your BLAS implementation here
@@ -23,19 +23,20 @@ double *getTrans(int N, double *mt) {
 }
 
 double* my_solver(int N, double *A, double *B) {
-	double *C = calloc(N * N, sizeof(double));
-	double *trns = getTrans(N, A);
+	return NULL;
+	// double *C = calloc(N * N, sizeof(double));
+	// double *trns = getTrans(N, A);
 
-	// Calculate A * A^t => matrix trns will have the answer
-	cblas_dtrmm(CblasRowMajor, CblasLeft, CblasUpper, CblasNoTrans, CblasNonUnit, N, N, 1.0, A, N, trns, N);
+	// // Calculate A * A^t => matrix trns will have the answer
+	// cblas_dtrmm(CblasRowMajor, CblasLeft, CblasUpper, CblasNoTrans, CblasNonUnit, N, N, 1.0, A, N, trns, N);
 
-	// Caculate C = B^t * B
-	cblas_dgemm(CblasRowMajor, CblasTrans, CblasNoTrans, N, N, N, 1.0, B, N, B, N, 1.0, C, N);
+	// // Caculate C = B^t * B
+	// cblas_dgemm(CblasRowMajor, CblasTrans, CblasNoTrans, N, N, N, 1.0, B, N, B, N, 1.0, C, N);
 
-	// Calculate C = B * trsn + C
-	cblas_dgemm(CblasRowMajor, CblasNotrans, CblasNoTrans, N, N, N, 1.0, B, N, trns, N, 1.0, C, N);
+	// // Calculate C = B * trsn + C
+	// cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, N, N, N, 1.0, B, N, trns, N, 1.0, C, N);
 
-	free(trns);
+	// free(trns);
 
-	return C;
+	// return C;
 }

@@ -19,8 +19,8 @@ double* my_solver(int N, double *A, double* B) {
 
 		for (j = 0; j < N; ++j) {
 			register double sum = 0;
-			register double *first_opperand =  AAt_line + i;
-			register double *second_operand = AAt + j * N + i;
+			register double *first_opperand =  A + i * (N + 1);
+			register double *second_operand = A + j * N + i;
 
 			for (k = i; k < N; ++k) {
 				sum += *first_opperand * *second_operand;
@@ -28,16 +28,14 @@ double* my_solver(int N, double *A, double* B) {
 				second_operand++;
 			}
 
-			*(AAt_line + j) = sum;
+			*(AAt_line + j) += sum;
 		}
 	}
 
 	// Perform C = B * AAt
-	double *C_saved = C;
-
 	for (i = 0; i < N; ++i) {
 		register double *B_saved = B + i * N;
-		register double *C_line = C_saved;
+		register double *C_line = C + i * N;
 
 		for (k = 0; k < N; ++k) {
 			register double *AAt_saved = AAt + k * N;
@@ -46,12 +44,11 @@ double* my_solver(int N, double *A, double* B) {
 			for (j = 0; j < N; ++j) {
 				*(C_line + j) += value * *(AAt_saved + j);
 			}
-
 		}
 	}
 
 	// Calculate C + Bt * B
-	C_saved = C;
+	double *C_saved = C;
 
 	for (i = 0; i < N; ++i) {
 		for (j = 0; j < N; ++j) {
@@ -65,7 +62,7 @@ double* my_solver(int N, double *A, double* B) {
 				B_column += N;
 			}
 
-			*C_saved += sum;
+			*C_saved = *C_saved + sum;
 			C_saved++;
 		}
 	}
