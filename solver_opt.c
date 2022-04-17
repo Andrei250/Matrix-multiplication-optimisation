@@ -48,22 +48,19 @@ double* my_solver(int N, double *A, double* B) {
 	}
 
 	// Calculate C + Bt * B
-	double *C_saved = C;
+	for (k = 0; k < N; ++k) {
+		register double *B_line = B + k * N;
 
-	for (i = 0; i < N; ++i) {
-		for (j = 0; j < N; ++j) {
-			register double sum = 0;
-			register double *B_line = B + i;
-			register double *B_column = B + j;
+		for (i = 0; i < N; ++i) {
+			register double value = *(B_line + i);
+			register double *add = B_line;
+			register double *C_line = C + i * N;
 
-			for (k = 0; k < N; ++k) {
-				sum += *B_line * *B_column;
-				B_line += N;
-				B_column += N;
+			for (j = 0; j < N; ++j) {
+				*C_line += value * *add;
+				add++;
+				C_line++;
 			}
-
-			*C_saved = *C_saved + sum;
-			C_saved++;
 		}
 	}
 

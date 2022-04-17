@@ -1,0 +1,20 @@
+neopt
+Run=./tema2_neopt: N=400: Time=1.461764
+Run=./tema2_neopt: N=800: Time=13.195434
+Run=./tema2_neopt: N=1200: Time=44.031673
+Run=./tema2_neopt: N=1600: Time=125.100342
+Run=./tema2_neopt: N=2000: Time=238.416779
+
+opt
+Run=./tema2_opt_m: N=400: Time=0.437839
+Run=./tema2_opt_m: N=800: Time=3.468010
+Run=./tema2_opt_m: N=1200: Time=11.767325
+Run=./tema2_opt_m: N=1600: Time=28.936396
+Run=./tema2_opt_m: N=2000: Time=56.849007
+
+blas
+Run=./tema2_blas: N=400: Time=0.046759
+Run=./tema2_blas: N=800: Time=0.345365
+Run=./tema2_blas: N=1200: Time=1.142244
+Run=./tema2_blas: N=1600: Time=2.671518
+Run=./tema2_blas: N=2000: Time=5.180922
