@@ -1,20 +1,113 @@
-neopt
-Run=./tema2_neopt: N=400: Time=1.461764
-Run=./tema2_neopt: N=800: Time=13.195434
-Run=./tema2_neopt: N=1200: Time=44.031673
-Run=./tema2_neopt: N=1600: Time=125.100342
-Run=./tema2_neopt: N=2000: Time=238.416779
+Dumitrescu Andrei 333CC
 
-opt
-Run=./tema2_opt_m: N=400: Time=0.437839
-Run=./tema2_opt_m: N=800: Time=3.468010
-Run=./tema2_opt_m: N=1200: Time=11.767325
-Run=./tema2_opt_m: N=1600: Time=28.936396
-Run=./tema2_opt_m: N=2000: Time=56.849007
+Pornind de la cea mai inceata implementare la cea mai rapida:
 
-blas
-Run=./tema2_blas: N=400: Time=0.046759
-Run=./tema2_blas: N=800: Time=0.345365
-Run=./tema2_blas: N=1200: Time=1.142244
-Run=./tema2_blas: N=1600: Time=2.671518
-Run=./tema2_blas: N=2000: Time=5.180922
+Implementarea pentru varianta neoptimizata:
+
+- Ideea este destul de straight forward. Prima data calculez
+  inmultirea A * A^t si retin valoarea in matricea AAt.
+- Se realizeaza cu 3 foruri, iar forul interior cu k porneste
+  de la i pana la N, deoarece A este sueprior triunghiulara si
+  am reusit sa reduc calculele cu peste 40% (deoarece este ignorata)
+  partea din stanga jos a matricei.
+- Apoi calculez in C pe B * AAt, ia rla final adun Bt * B.
+- Toate calculele au fost facute cu 3 foruri, iar timpii
+  se pot observa in grafice.
+
+Implementarea pentru varianta optimizata:
+
+- Una din cele mai importante optimizari este folosirea keyword-ului
+  'register', deoarece astfel i se spune compilatorului ca acea valoare
+  este importanta si ar trebui sa o tina intr-un registru, pentru acces
+  mai rapid.
+
+- Ordinea operatiilor este aceeasi ca la neoptimizata, insa ordinea
+  loop-urilor difera.
+
+- Pentru calcului A * At, forurile sunt aceleasi, insa am retinut valoarea
+  sumei pentru al 3-lea for intr-o variabila, reducat astfel numarul
+  operatiilor de la N * (1 inmultire + 1 adunare) la N adunari
+
+- De asemenea accesul la memorie in vector avea 1 inmultire + 1 adunare.
+  Astfel am retinut in pointeri adresa de memorie de unde incepe 
+  folosirea valorilor pentru urmatoarea iteratie.
+  de ex: pentru A[i][k] retin in first-operand pointer catre A + i * (N + 1),
+  deoarece k ia valori de la i la N, de aici venind N + 1.
+  La fiecare iteratie cu K, maresc cu 1 valorile lui first_operand si
+  second_operand pentru a trece mai departe. La final adaug in
+  *(AAt_line + j) valoarea sum. Am optat pentru un astfel de acces al memoriei
+  din acelasi motiv de a nu face la fiecare iteratie prin j o inmultire + 1
+  adunare.
+
+- Pentru a calcula B * AAt, ideea este aceeasi, de a folosi register si 
+  pointeri catre adrese in memorie. Insa o alta optimizare ar fi sa 
+  trecem ordinea indicilor din i j k in i k j, pentru a aduce operatia
+  C[i * N + j] += B[i * N + k] * AAt[k * N + j] la ceva de genul
+  secvential = constant * secvential. Altfel trebuia realizat ceva
+  asemanator cu prima varianta si se generau mai multe calcule.
+  Am observat acest lucru si din rularea testului si observarea imbunatatirii
+  cu 2 secunde.
+
+- Pentru C = C + Bt * B, ideea este aceeasi ca mai sus, insa ordinea for-urilor
+  este k i j. Daca era i j k, in al 3-lea for trebuia sa adunam de fiecare data
+  cate N, accestul fiind B[k * N + j], care este mai costisitor decat un simplu
+  inc.
+
+Implementare pentru varianta blas:
+
+- Initial am realizat transpusa matricei A.
+- Ideea este sa facem A * A^t, apoi sa calculam in C pe B^t * B, iar la 
+  final sa facem C = B * A * A^t + C.
+- Am folosit functia cblas_dtrmm pentru a face A * A^t, utilizand flag-urile
+  CblasUpper ( matrice superior triunghiulara) si CblasNoTrans, deoarece
+  in matricea trns avem transpusa, iar rezultatul apelului functiei se retine
+  tot in trns. Din documentatie ne dam seama ca aceasta functie realizeaza
+  operatii de tipul Matrice = valoare * op(Matrice2) * Matrice.
+  Folosind CblasLeft, inmultirea se face la stanga.
+
+- Folosesc cblas_dgemm pentru a face operatii de tipul M = val * Op(A) * op(B)
+  + val2 * M, unde val sunt niste valori numerice, iar Op(X) poate fi X sau X^t
+  in functie de flagul setat. Astfel in C retin B^t * B, iar apoi
+  C = B * trns + C.
+
+Explicatii cachegrind:
+- I refs:
+  - Observam ca din punct de vedere al operatiilor, cel mai bun program
+    este cel cu blas, deoarece face de 10 ori mai putine decat cel optimizat
+    de mine. Cel optimizat face de 3 ori mai putine decat cel neoptimizat.
+    110M vs 2.5 MLD vs 7.4 MLD
+  - Miss-ul este 0, deoarece prog este incarcat in memorie. 
+  - La acest nivel vorbim de instructiuni.
+- D refs ( primul nivel cache ):
+  - La fel, cel mai bun este blas, cu aceleasi proportii ca la I refs.
+  - Miss rateul pe cache in acest caz este de 5.4% pentru neoptimizat,
+    1.8% pentru optimizat (de 3 ori mai bun) si 1.7% pentru blas.
+  - Ne putem da seama ca dpdv al miss rate-ului, programul optimizat este
+    aproape la fel de bun ca blas-ul, insa aici vorbim de procente.
+    Dpdv al valorilor, este de 10 ori mai slab.
+- Branches ( numarul de conditionale ):
+  - Varianta optimizata si cea neoptimizata sunt la fel, deoarece
+    avem acelas numar de conditionale.
+  - Blas-ul este mult mai bun, avand doar 4.5M comparativ cu 164M la celalalte
+  - Blas vs celalalte 2 variante mispred rate: 1.5% vs 0.3%
+
+- Optimizari:
+  - Register ii spune compilatorului sa stocheze informatia intr-un registru
+    pentru a avea un acces mai mare.
+  - Ordinea ifurilor schimbata. din i j k in i k j si k i j, pentru a reduce
+    miss rate-ul. Astfel se aduce in cache o linie si se foloseste toata.
+    pentru folosirea i j k la ultimele 2 foruri, se aducea linia, insa se
+    folosea doar o valoare din aceasta apoi era invalidata, ceea ce este
+    foarte costisitor.
+
+Explicatii grafic:
+- In folderul grafice se afla un fisier Grafice.xlsx.
+- Am folosit google sheets pentru a plota valorile.
+- Am facut teste pentru 5 valori: 400 800 1200 1600 si 2000
+- Dupa mai multe teste, am facut o media a valorilor si le-am pus in
+  spread sheet. Apoi am plotat raspunsurile. Din sheet ne putem da seama
+  ca odata cu cresterea lui N, varianta neoptimizata creste mult mai brusc
+  decat celalalte variante. Cea mai buna solutie este cea cu blas,
+  avand timpi de 0.05, 0.35, 1.34, 2.67, 5.18, crescand cel mai lent.
+  Varianta Optimizata pare sa fie aproape constant de 4 ori mai mica decat
+  varianta neoptimizata ca timp.
