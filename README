@@ -10,7 +10,7 @@ Implementarea pentru varianta neoptimizata:
   de la i pana la N, deoarece A este sueprior triunghiulara si
   am reusit sa reduc calculele cu peste 40% (deoarece este ignorata)
   partea din stanga jos a matricei.
-- Apoi calculez in C pe B * AAt, ia rla final adun Bt * B.
+- Apoi calculez in C pe Bt * B, iar la final adun B * AAt.
 - Toate calculele au fost facute cu 3 foruri, iar timpii
   se pot observa in grafice.
 
@@ -21,8 +21,7 @@ Implementarea pentru varianta optimizata:
   este importanta si ar trebui sa o tina intr-un registru, pentru acces
   mai rapid.
 
-- Ordinea operatiilor este aceeasi ca la neoptimizata, insa ordinea
-  loop-urilor difera.
+- Ordinea loop-urilor difera fata de varianta neoptimizata.
 
 - Pentru calcului A * At, forurile sunt aceleasi, insa am retinut valoarea
   sumei pentru al 3-lea for intr-o variabila, reducat astfel numarul

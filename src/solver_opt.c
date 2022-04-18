@@ -8,10 +8,10 @@
  * Add your optimized implementation here
  */
 double* my_solver(int N, double *A, double* B) {
-	double *C = (double *) malloc(N * N * sizeof(double));
+	double *C = (double *) calloc(N * N, sizeof(double));
 	int i, j, k;
 
-	double *AAt = (double *) malloc(N * N * sizeof(double));
+	double *AAt = (double *) calloc(N * N, sizeof(double));
 
 	// Perform A * At
 	for (i = 0; i < N; ++i) {

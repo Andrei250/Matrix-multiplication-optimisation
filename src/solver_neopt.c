@@ -22,20 +22,20 @@ double* my_solver(int N, double *A, double* B) {
 		}
 	}
 
-	// Calculate B * AAt
-	for (i = 0; i < N; ++i) {
-		for (j = 0; j < N; ++j) {
-			for (k = 0; k < N; ++k) {
-				C[i * N + j] += B[i * N + k] * AAt[k * N + j];
-			}
-		}
-	}
-
-	// Calculate C + Bt * B
+	// Calculate Bt * B
 	for (i = 0; i < N; ++i) {
 		for (j = 0; j < N; ++j) {
 			for (k = 0; k < N; ++k) {
 				C[i * N + j] += B[k * N + i] * B[k * N + j];
+			}
+		}
+	}
+
+	// Calculate C + B * AAt
+	for (i = 0; i < N; ++i) {
+		for (j = 0; j < N; ++j) {
+			for (k = 0; k < N; ++k) {
+				C[i * N + j] += B[i * N + k] * AAt[k * N + j];
 			}
 		}
 	}
