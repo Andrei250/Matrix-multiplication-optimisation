@@ -19,7 +19,8 @@ Implementarea pentru varianta optimizata:
 - Una din cele mai importante optimizari este folosirea keyword-ului
   'register', deoarece astfel i se spune compilatorului ca acea valoare
   este importanta si ar trebui sa o tina intr-un registru, pentru acces
-  mai rapid.
+  mai rapid. De aceea variabilele de iteratie aduc cele mai mari
+  imbunatatiri, acestea fiidn schimbate cel mai des.
 
 - Ordinea loop-urilor difera fata de varianta neoptimizata.
 
@@ -73,17 +74,17 @@ Explicatii cachegrind:
 - I refs:
   - Observam ca din punct de vedere al operatiilor, cel mai bun program
     este cel cu blas, deoarece face de 10 ori mai putine decat cel optimizat
-    de mine. Cel optimizat face de 3 ori mai putine decat cel neoptimizat.
-    110M vs 2.5 MLD vs 7.4 MLD
+    de mine. Cel optimizat face de 3-4 ori mai putine decat cel neoptimizat.
+    110M vs 2.2 MLD vs 7.4 MLD
   - Miss-ul este 0, deoarece prog este incarcat in memorie. 
   - La acest nivel vorbim de instructiuni.
 - D refs ( primul nivel cache ):
   - La fel, cel mai bun este blas, cu aceleasi proportii ca la I refs.
   - Miss rateul pe cache in acest caz este de 5.4% pentru neoptimizat,
-    1.8% pentru optimizat (de 3 ori mai bun) si 1.7% pentru blas.
+    3.3% pentru optimizat (de 1.5 ori mai bun) si 1.7% pentru blas.
   - Ne putem da seama ca dpdv al miss rate-ului, programul optimizat este
-    aproape la fel de bun ca blas-ul, insa aici vorbim de procente.
-    Dpdv al valorilor, este de 10 ori mai slab.
+    de 2 ori mai slab decat blas-ul, insa aici vorbim de procente.
+    Dpdv al valorilor, este de 6 ori mai slab.
 - Branches ( numarul de conditionale ):
   - Varianta optimizata si cea neoptimizata sunt la fel, deoarece
     avem acelas numar de conditionale.
@@ -102,11 +103,11 @@ Explicatii cachegrind:
 Explicatii grafic:
 - In folderul grafice se afla un fisier Grafice.xlsx.
 - Am folosit google sheets pentru a plota valorile.
-- Am facut teste pentru 5 valori: 400 800 1200 1600 si 2000
+- Am facut teste pentru 6 valori: 400 800 1200 1600, 2000 si 3000
 - Dupa mai multe teste, am facut o media a valorilor si le-am pus in
   spread sheet. Apoi am plotat raspunsurile. Din sheet ne putem da seama
   ca odata cu cresterea lui N, varianta neoptimizata creste mult mai brusc
   decat celalalte variante. Cea mai buna solutie este cea cu blas,
-  avand timpi de 0.05, 0.35, 1.34, 2.67, 5.18, crescand cel mai lent.
-  Varianta Optimizata pare sa fie aproape constant de 4 ori mai mica decat
+  avand timpi de 0.05, 0.35, 1.34, 2.67, 5.18, 17 crescand cel mai lent.
+  Varianta Optimizata pare sa fie aproape constant de 7 ori mai mica decat
   varianta neoptimizata ca timp.

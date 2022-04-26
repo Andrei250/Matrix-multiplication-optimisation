@@ -9,7 +9,7 @@
  */
 double* my_solver(int N, double *A, double* B) {
 	double *C = (double *) calloc(N * N, sizeof(double));
-	int i, j, k;
+	register int i, j, k;
 
 	double *AAt = (double *) calloc(N * N, sizeof(double));
 

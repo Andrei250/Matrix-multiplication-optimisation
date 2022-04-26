@@ -1,30 +1,30 @@
-==2289797== Cachegrind, a cache and branch-prediction profiler
-==2289797== Copyright (C) 2002-2017, and GNU GPL'd, by Nicholas Nethercote et al.
-==2289797== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
-==2289797== Command: ./tema2_opt_m /export/asc/tema2/input_valgrind
-==2289797== 
---2289797-- warning: L3 cache found, using its data for the LL simulation.
---2289797-- warning: specified LL cache: line_size 64  assoc 16  total_size 12,582,912
---2289797-- warning: simulated LL cache: line_size 64  assoc 24  total_size 12,582,912
-Run=./tema2_opt_m: N=400: Time=15.152862
+==2610460== Cachegrind, a cache and branch-prediction profiler
+==2610460== Copyright (C) 2002-2017, and GNU GPL'd, by Nicholas Nethercote et al.
+==2610460== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==2610460== Command: ./tema2_opt_m /export/asc/tema2/input_valgrind
+==2610460== 
+--2610460-- warning: L3 cache found, using its data for the LL simulation.
+--2610460-- warning: specified LL cache: line_size 64  assoc 16  total_size 12,582,912
+--2610460-- warning: simulated LL cache: line_size 64  assoc 24  total_size 12,582,912
+Run=./tema2_opt_m: N=400: Time=11.267750
 <<< Bonus=0p >>>
-==2289797== 
-==2289797== I   refs:      2,561,495,935
-==2289797== I1  misses:            1,622
-==2289797== LLi misses:            1,542
-==2289797== I1  miss rate:          0.00%
-==2289797== LLi miss rate:          0.00%
-==2289797== 
-==2289797== D   refs:      1,135,950,520  (1,005,046,785 rd   + 130,903,735 wr)
-==2289797== D1  misses:       20,352,553  (   20,301,319 rd   +      51,234 wr)
-==2289797== LLd misses:           82,784  (       51,697 rd   +      31,087 wr)
-==2289797== D1  miss rate:           1.8% (          2.0%     +         0.0%  )
-==2289797== LLd miss rate:           0.0% (          0.0%     +         0.0%  )
-==2289797== 
-==2289797== LL refs:          20,354,175  (   20,302,941 rd   +      51,234 wr)
-==2289797== LL misses:            84,326  (       53,239 rd   +      31,087 wr)
-==2289797== LL miss rate:            0.0% (          0.0%     +         0.0%  )
-==2289797== 
-==2289797== Branches:        163,994,984  (  163,754,284 cond +     240,700 ind)
-==2289797== Mispredicts:         502,033  (      501,783 cond +         250 ind)
-==2289797== Mispred rate:            0.3% (          0.3%     +         0.1%   )
+==2610460== 
+==2610460== I   refs:      2,207,814,342
+==2610460== I1  misses:            1,623
+==2610460== LLi misses:            1,542
+==2610460== I1  miss rate:          0.00%
+==2610460== LLi miss rate:          0.00%
+==2610460== 
+==2610460== D   refs:        620,264,136  (489,841,595 rd   + 130,422,541 wr)
+==2610460== D1  misses:       20,352,543  ( 20,301,311 rd   +      51,232 wr)
+==2610460== LLd misses:           82,782  (     51,695 rd   +      31,087 wr)
+==2610460== D1  miss rate:           3.3% (        4.1%     +         0.0%  )
+==2610460== LLd miss rate:           0.0% (        0.0%     +         0.0%  )
+==2610460== 
+==2610460== LL refs:          20,354,166  ( 20,302,934 rd   +      51,232 wr)
+==2610460== LL misses:            84,324  (     53,237 rd   +      31,087 wr)
+==2610460== LL miss rate:            0.0% (        0.0%     +         0.0%  )
+==2610460== 
+==2610460== Branches:        163,994,981  (163,754,282 cond +     240,699 ind)
+==2610460== Mispredicts:         502,023  (    501,775 cond +         248 ind)
+==2610460== Mispred rate:            0.3% (        0.3%     +         0.1%   )
